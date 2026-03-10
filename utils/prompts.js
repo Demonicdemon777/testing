@@ -22,13 +22,17 @@ ${resumeText}
 exports.interviewQuestions = (resumeText) => {
 
 return `
-Generate 10 interview questions based on this resume.
+You are an AI interview simulator.
 
-Focus on:
-Projects
-Skills
-Technologies
-Problem solving
+Generate 10 personalized interview questions based on the candidate's resume.
+
+The questions should focus on:
+- Projects mentioned in the resume
+- Technologies used
+- Problem-solving approaches
+- Real-world implementation of skills
+
+Ask questions that an interviewer would ask to understand the candidate's experience.
 
 Resume:
 ${resumeText}
