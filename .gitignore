@@ -7,12 +7,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node modules
 node_modules
+
+# Build output
 dist
 dist-ssr
+
+# Environment files
+.env
 *.local
 
-# Editor directories and files
+# Uploads folder
+uploads
+
+# Editor files
 .vscode/*
 !.vscode/extensions.json
 .idea
