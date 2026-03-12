@@ -9,18 +9,26 @@ const {
   evaluateAnswer
 } = require("../controllers/resumeController");
 
-const upload = multer({ dest: "uploads/" });
+// Configure multer
+const upload = multer({
+  dest: "uploads/"
+});
 
-// Upload resume
+
+// 1️⃣ Upload resume
 router.post("/upload", upload.single("resume"), uploadResume);
 
-// Analyze resume
+
+// 2️⃣ Analyze resume (after upload)
 router.post("/analyze-resume", analyzeResume);
 
-// Generate interview questions
+
+// 3️⃣ Generate interview questions
 router.post("/interview-questions", generateInterviewQuestions);
 
-// Evaluate answer
+
+// 4️⃣ Evaluate interview answer
 router.post("/evaluate-answer", evaluateAnswer);
+
 
 module.exports = router;

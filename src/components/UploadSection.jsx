@@ -1,24 +1,73 @@
+import { uploadResume, analyzeResume } from "../api/api";
 import { useState, useRef } from "react";
 
-export default function UploadSection() {
+export default function UploadSection({ setScore }) {
 
   const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [analysis, setAnalysis] = useState(""); // store AI feedback
+
   const inputRef = useRef(null);
 
   function handleFileChange(e) {
-    const file = e.target.files[0];
-    if (file) {
-      setFileName(file.name);
+
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
     }
+
   }
 
-  function handleAnalyze() {
+  async function handleAnalyze() {
+
+    if (!file) {
+      alert("Please upload a resume first");
+      return;
+    }
+
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-    }, 2200);
+    const formData = new FormData();
+    formData.append("resume", file);
+
+    try {
+
+      // Upload resume
+      const uploadRes = await uploadResume(formData);
+
+      const resumeText = uploadRes.data.resumeText;
+
+      // Send text for AI analysis
+      const analysisRes = await analyzeResume({
+        resumeText: resumeText,
+        role: "Software Developer"
+      });
+
+      console.log("AI Analysis:", analysisRes.data);
+
+      const aiText = analysisRes.data.analysis || "";
+
+      // Store AI feedback for display
+      setAnalysis(aiText);
+
+      // Extract score from AI response
+      const match = aiText.match(/(\d+)\s*out\s*of\s*100/i);
+
+const extractedScore = match ? parseInt(match[1]) : 75;
+
+setScore(extractedScore);
+
+    } catch (error) {
+
+      console.error("Analyze error:", error);
+      alert("Analysis failed");
+
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -33,7 +82,7 @@ export default function UploadSection() {
         <p>Supports PDF, DOCX, and TXT files up to 5MB</p>
 
         <label className="file-label" htmlFor="fileInput">
-          {fileName ? `✅ ${fileName}` : '📁 Choose File'}
+          {fileName ? `✅ ${fileName}` : "📁 Choose File"}
         </label>
 
         <input
@@ -54,9 +103,17 @@ export default function UploadSection() {
           ✦ Analyze Resume
         </button>
 
-        <div className={`loading ${loading ? 'visible' : ''}`}>
+        <div className={`loading ${loading ? "visible" : ""}`}>
           ⚡ Analyzing your resume...
         </div>
+
+        {/* AI Feedback Section */}
+        {analysis && (
+          <div className="analysis-box">
+            <h3>AI Resume Feedback</h3>
+            <pre>{analysis}</pre>
+          </div>
+        )}
 
       </div>
 

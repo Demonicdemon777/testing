@@ -1,23 +1,31 @@
-import './index.css'
-
-import Background from './components/Background.jsx'
-import Navbar from './components/Navbar.jsx'
-import Hero from './components/Hero.jsx'
-import UploadSection from './components/UploadSection.jsx'
-import ScoreDashboard from './components/ScoreDashboard.jsx'
-import Features from './components/Features.jsx'
-import Footer from './components/Footer.jsx'
+import { useState } from "react";
+import "./index.css";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Features from "./components/Features";
+import UploadSection from "./components/UploadSection";
+import ScoreDashboard from "./components/ScoreDashboard";
+import Footer from "./components/Footer";
 
 export default function App() {
+
+  const [score, setScore] = useState(null);
+
   return (
-    <>
-      <Background />
+    <div>
+
       <Navbar />
+
       <Hero />
-      <UploadSection />
-      <ScoreDashboard />
+
       <Features />
+
+      <UploadSection setScore={setScore} />
+
+      <ScoreDashboard score={score} />
+
       <Footer />
-    </>
-  )
+
+    </div>
+  );
 }
